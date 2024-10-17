@@ -3,10 +3,10 @@ from src.hello_world import helloWorld
 
 class TestHelloWorld(unittest.TestCase):
 
-    def setUp(self):
+    def set_up(self):
         self.hw = helloWorld()
 
-    def testHelloWorld(self):
+    def test_hello_world(self):
         expected = "Hello World!"
         actual = self.hw.say_hello()
         self.assertEqual(expected, actual)
