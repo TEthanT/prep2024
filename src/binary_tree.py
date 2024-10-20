@@ -73,11 +73,11 @@ class BinaryTree:
     def _search(self, curr, data):
         if curr is None:
             print(f'{data} does not exist in this binary tree.')
-            return False
+            return None
         
         if data == curr.data:
             print(f'Found {data}')
-            return True
+            return curr
         elif data < curr.data:
             print(f'{data} is less than than {curr.data}, searching left.')
             return self._search(curr.left, data)
@@ -100,7 +100,7 @@ class BinaryTree:
             return
         self._inorder(curr.left, result)
         print(f'[{curr.data}]', end = ' ')
-        result.append(curr.data)
+        result.append(curr)
         self._inorder(curr.right, result)
 
     # Preorder
@@ -116,7 +116,7 @@ class BinaryTree:
         if curr is None:
             return
         print(f'[{curr.data}]', end = ' ')
-        result.append(curr.data)
+        result.append(curr)
         self._preorder(curr.left, result)
         self._preorder(curr.right, result)   
 
@@ -135,10 +135,57 @@ class BinaryTree:
         self._postorder(curr.left, result)
         self._postorder(curr.right, result)
         print(f'[{curr.data}]', end = ' ')
-        result.append(curr.data)
+        result.append(curr)
 
 
     # TODO -  Delete
+    def delete(self, data):
+        print(f'Deleting {data}')
+        if self.root is None:
+            return None
+        
+        self.root = self._delete(self.root, data)
+    
+    def _delete(self, curr, data):
+        if curr is None:
+            print(f'{data} not found.')
+            return curr
+
+        if curr.data > data:
+            print(f'Current node {curr.data} is greater than {data}. Traversing left.')
+            curr.left = self._delete(curr.left, data)
+        elif curr.data < data:
+            print(f'Current node {curr.data} is less than {data}. Traversing right.')
+            curr.right = self._delete(curr.right, data)        
+        else:
+            # One child
+            if curr.right is None:
+                print(f'Deleting {data}. Replacing with it\'s left node with value {curr.left.data if curr.left else "None"}')
+                return curr.left
+            elif curr.left is None:
+                print(f'Deleting {data}. Replacing with it\'s right node with value {curr.right.data if curr.right else "None"}')
+                return curr.right
+            else:
+                # 2 children, get the inorder successor of the right subtree, e.g the min value of the right subtree.
+                inorder_successor = self.get_successor(curr)
+                print(f'Deleting {data}. Replacing the value with the min value of the right subtree '
+                        f'(inorder successor) [{inorder_successor.data}]')                                        
+                curr.data = inorder_successor.data
+                curr.right = self._delete(curr.right, inorder_successor.data)
+        
+        return curr
+        
+        
+    def get_successor(self, curr):
+        curr = curr.right
+        while curr is not None and curr.left is not None:
+            curr = curr.left
+        return curr
+        
+
+
+
+
 
 
 

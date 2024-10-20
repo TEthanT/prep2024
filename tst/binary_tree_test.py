@@ -15,8 +15,8 @@ class BinaryTreeTest(unittest.TestCase):
         tree.insert_recursive(3)
         tree.insert_recursive(7)
 
-        self.assertEqual(tree.search(15), True)
-        self.assertEqual(tree.search(77), False)
+        self.assertEqual(tree.search(15).data, 15)
+        self.assertEqual(tree.search(77), None)
     
     def test_inorder(self):
         # Setup
@@ -28,7 +28,9 @@ class BinaryTreeTest(unittest.TestCase):
 
         # Validate
         self.assertEqual(len(result), 12)
-        self.assertEqual(result, expected_inorder)
+        self.assertEqual(len(result), 12)
+        for i, node in enumerate(result):
+            self.assertEqual(expected_inorder[i], node.data)
 
     def test_preorder(self):
         # Setup
@@ -40,7 +42,8 @@ class BinaryTreeTest(unittest.TestCase):
 
         # Validate
         self.assertEqual(len(result), 12)
-        self.assertEqual(result, expected_preorder)
+        for i, node in enumerate(result):
+            self.assertEqual(expected_preorder[i], node.data)
 
     def test_postorder(self):
         # Setup
@@ -52,7 +55,26 @@ class BinaryTreeTest(unittest.TestCase):
 
         # Validate
         self.assertEqual(len(result), 12)
-        self.assertEqual(result, expected_postorder)
+        self.assertEqual(len(result), 12)
+        for i, node in enumerate(result):
+            self.assertEqual(expected_postorder[i], node.data)
+
+    def test_delete(self):
+        # Setup
+        tree = self.create_tree([100, 75, 125, 65, 85, 115, 150, 60, 70, 80, 95, 110, 120, 135, 175])
+        expected = [60, 65, 70, 75, 80, 85, 95, 110, 115, 120, 125, 135, 150, 175]
+
+        # Run
+        tree.delete(100)
+
+        # Validate 
+        result = tree.inorder()
+        result_data = []
+        for node in result:
+            result_data.append(node.data)
+
+        self.assertEqual(expected, result_data)
+        
 
 
     # Helpers
